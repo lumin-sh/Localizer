@@ -5,7 +5,6 @@ import java.io.File
 import java.util.Locale
 
 /**
- * Localization manager supporting multiple file formats (JSON and TOML)
  * Handles loading translations and retrieving messages by ID for different locales
  */
 class Localizer {
