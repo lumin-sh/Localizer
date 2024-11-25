@@ -26,7 +26,7 @@ class Localizer {
      * Load all the specified locales translation files (if they exist)
      */
     fun loadTranslations(vararg locales: Locale): Boolean {
-        return locales.all { loadTranslationFromResource("${it.language}.json", it) }
+        return locales.all { loadTranslationFromResource("lang/${it.language}.json", it) }
     }
 
     /**
