@@ -23,6 +23,43 @@ class Localizer {
     }
 
     /**
+     * Load all the specified locales translation files (if they exist)
+     */
+    fun loadTranslations(vararg locales: Locale): Boolean {
+        return locales.all { loadTranslationFromResource("${it.language}.json", it) }
+    }
+
+    /**
+     * Load translations from a specific resource file
+     * @param filename Name of the resource file (e.g., "en.json")
+     * @param locale Locale for these translations
+     */
+    private fun loadTranslationFromResource(filename: String, locale: Locale): Boolean {
+        return try {
+            // Get the resource as a stream
+            val resourceStream = this::class.java.classLoader.getResourceAsStream(filename)
+
+            if (resourceStream != null) {
+                val content = resourceStream.bufferedReader().use { it.readText() }
+
+                // Determine file type and parse accordingly
+                val translationMap = when {
+                    filename.endsWith(".json") -> Json.decodeFromString<Map<String, String>>(content)
+                    else -> return false
+                }
+
+                // Store translations for this locale
+                translations[locale] = translationMap
+                true
+            } else {
+                false
+            }
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    /**
      * Get a localized message by its ID
      * @param id Message identifier
      * @param locale Desired locale (defaults to system locale)
